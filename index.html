@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Robot Bobby Earth</title>
+    <style>
+      :root{
+        --customColor: #0090de;
+      }
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      #header{
+        position: absolute;
+        width: 100vw;
+        width: 100dvw;
+        height: 100vh;
+        height: 100dvh;
+        display: flex;
+        justify-content: center;
+        padding-top: 1rem;
+        pointer-events: none;
+      }
+      .shade {
+        font-size: 70px;
+        font-weight: 600;
+        color: #fdfdfe;
+        text-shadow: 0px 0px 5px var(--customColor),
+          0px 0px 10px var(--customColor),
+          0px 0px 10px var(--customColor),
+          0px 0px 20px var(--customColor);
+      }
+      .h1{
+        font-size: 1rem;
+        @media (width > 300px){
+          font-size: calc(1rem + 0.5vw);
+        }
+        @media (width > 600px){
+          font-size: calc(1rem + 1.5vw);
+        }
+        text-align: center;
+      }
+    </style>
+    <script type="importmap">
+      {
+      	"imports": {
+      		"three": "https://cdn.jsdelivr.net/npm/three@0.161/build/three.module.js",
+          "jsm/": "https://cdn.jsdelivr.net/npm/three@0.161/examples/jsm/"
+        }
+      }
+    </script>
+    <script defer type="module" src="index.js"></script>
+  </head>
+  <body>
+    <header id="header">
+      <h1 class="shade h1">The world in ThreeJS</h1>
+    </header>
+  </body>
+</html>
