@@ -53,8 +53,11 @@
       .dg.a{
         float: none;
         position: absolute;
-        top: 20px;
+        top: 1rem;
         right: 5px;
+        @media (width < 600px){
+          top: 5rem;
+        }
       }
       .close-button{
         background: var(--customColor) !important;
