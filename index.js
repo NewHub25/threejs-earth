@@ -1,16 +1,25 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'jsm/controls/OrbitControls.js';
-
 import getStarfield from './src/getStarfield.js';
 import { getFresnelMat } from './src/getFresnelMat.js';
+import {
+  TitleController,
+  StarController,
+  AccelerationController,
+  CloudController,
+} from './gui.js';
 
-const w = window.innerWidth;
-const h = window.innerHeight;
+const { innerWidth, innerHeight } = window;
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, w / h, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(
+  75,
+  innerWidth / innerHeight,
+  0.1,
+  1000
+);
 camera.position.z = 5;
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(w, h);
+renderer.setSize(innerWidth, innerHeight);
 document.body.appendChild(renderer.domElement);
 // THREE.ColorManagement.enabled = true;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -20,7 +29,7 @@ const earthGroup = new THREE.Group();
 earthGroup.rotation.z = (-23.4 * Math.PI) / 180;
 scene.add(earthGroup);
 new OrbitControls(camera, renderer.domElement);
-const detail = 12;
+const detail = 16;
 const loader = new THREE.TextureLoader();
 const geometry = new THREE.IcosahedronGeometry(1, detail);
 const material = new THREE.MeshPhongMaterial({
@@ -57,24 +66,33 @@ const glowMesh = new THREE.Mesh(geometry, fresnelMat);
 glowMesh.scale.setScalar(1.01);
 earthGroup.add(glowMesh);
 
-const stars = getStarfield({ numStars: 2000 });
-scene.add(stars);
-
 const sunLight = new THREE.DirectionalLight(0xffffff, 2.0);
 sunLight.position.set(-2, 0.5, 1.5);
 scene.add(sunLight);
 
+// Variables for controllers
+let STARS_COLLECT = null;
+let speed = 0.001;
+// Function for GUI
+function createStars(numStars = 1000) {
+  if (STARS_COLLECT) {
+    scene.remove(STARS_COLLECT);
+  }
+  STARS_COLLECT = getStarfield({ numStars });
+  scene.add(STARS_COLLECT);
+}
+STARS_COLLECT = getStarfield({ numStars: 2000 });
+scene.add(STARS_COLLECT);
+
 function animate() {
   requestAnimationFrame(animate);
-
-  earthMesh.rotation.y += 0.002;
-  lightsMesh.rotation.y += 0.002;
-  cloudsMesh.rotation.y += 0.0023;
-  glowMesh.rotation.y += 0.002;
-  stars.rotation.y -= 0.0002;
+  earthMesh.rotation.y += 0.002 + speed;
+  lightsMesh.rotation.y += 0.002 + speed;
+  cloudsMesh.rotation.y += 0.0023 + speed;
+  glowMesh.rotation.y += 0.002 + speed;
+  if (STARS_COLLECT) STARS_COLLECT.rotation.y -= 0.0002 + speed;
   renderer.render(scene, camera);
 }
-
 animate();
 
 function handleWindowResize() {
@@ -83,3 +101,17 @@ function handleWindowResize() {
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
 window.addEventListener('resize', handleWindowResize, false);
+
+// Listeners of controllers
+StarController.onChange((value) => {
+  createStars(value);
+});
+TitleController.onChange((value) => {
+  document.querySelector('.h1').innerHTML = value;
+});
+AccelerationController.onChange((value) => {
+  speed = value / (100 * 100);
+});
+CloudController.onChange((value) => {
+  value ? earthGroup.add(cloudsMesh) : earthGroup.remove(cloudsMesh);
+});

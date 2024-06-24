@@ -43,6 +43,25 @@
         }
         text-align: center;
       }
+      canvas{
+        cursor: grab;
+        &:active{
+          cursor: grabbing;
+        }
+      }
+      /* dat.gui */
+      .dg.a{
+        float: none;
+        position: absolute;
+        top: 20px;
+        right: 5px;
+      }
+      .close-button{
+        background: var(--customColor) !important;
+      }
+      .dg.main.a * {
+        transition: height .7s ease-in-out !important;
+      }
     </style>
     <script type="importmap">
       {
@@ -53,10 +72,11 @@
       }
     </script>
     <script defer type="module" src="index.js"></script>
+    <script defer type="module" src="gui.js"></script>
   </head>
   <body>
     <header id="header">
-      <h1 class="shade h1">The world in ThreeJS</h1>
+      <h1 class="shade h1">Hello world!</h1>
     </header>
   </body>
 </html>
