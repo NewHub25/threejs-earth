@@ -1,5 +1,5 @@
-# THREE.js Earth scene
+# THREE.js Earth
 
-Watch the tutorial on [YouTube](https://youtu.be/FntV9iEJ0tU)
+Thanks to Robot Bobby from YouTube
 
 Earth texture maps: [PlanetPixelEmporium](https://planetpixelemporium.com/earth.html)
